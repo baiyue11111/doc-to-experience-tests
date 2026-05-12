@@ -11,6 +11,8 @@ Transform any technical document into an independent, self-sustaining test suite
 
 **Core principle:** Tests are the product's second truth. Documents are the initial plan; tests are how users actually use the product. Once generated, tests are independent — they don't serve the document, they serve the user experience.
 
+**Testing boundary:** Tests verify behavior through public interfaces — never pierce internal implementation details. Mock only external dependencies (network, database, third-party APIs); never mock internal modules. A test that only proves mocks work as configured proves nothing about the real system.
+
 ## When to Use
 
 - Given a technical document, need full test coverage of all interactive experiences
@@ -262,7 +264,8 @@ tests/experience/
 | Mistake | Fix |
 |---------|-----|
 | Testing implementation details instead of user experience | Ask "would a user do this?" — if no, don't test it |
-| Mocking everything | Use real interactions; mocks hide real failures |
+| Mocking internal modules | Only mock external boundaries (HTTP, DB, third-party). Internal module mocks hide real integration failures and give false confidence |
+| Mocking everything to make tests pass | Real interactions reveal real failures. A green test suite full of mocks ≠ working product |
 | Sparse logs that don't capture the full picture | Every step gets a log event; on failure, auto-collect diagnostics |
 | Modifying tests without recording why | Always append to CHANGELOG.jsonl with reason |
 | Treating test failures as test bugs | Default assumption: code is wrong, not the test. Only modify test if product intentionally changed |
